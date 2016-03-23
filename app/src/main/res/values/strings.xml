@@ -1,4 +1,18 @@
 <resources>
-    <string name="app_name">tp2</string>
+    <string name="app_name">Formulaire nouveau client</string>
     <string name="action_settings">Settings</string>
+    <string name="action_empty">Vider le formulaire</string>
+    <string name="action_addPhone">Ajouter Téléphone</string>
+    <string name="action_wiki">Wikipedia</string>
+    <string name="title_activity_affiche">Affiche</string>
+    <string name="title_activity_list_view_person">ListViewPerson</string>
+    <string name="formulaire">Formulaire</string>
+    <string name="nom">Nom</string>
+    <string name="prenom">Prénom</string>
+    <string name="dateNaissance">Date de naissance</string>
+    <string name="villeNaissance">Ville de naissance</string>
+    <string name="valider">Valider</string>
+    <string name="newCustomer">Nouveau client</string>
+    <string name="listCustomer">Liste des clients</string>
+    <string name="registerFinish">Enregistrement terminé</string>
 </resources>

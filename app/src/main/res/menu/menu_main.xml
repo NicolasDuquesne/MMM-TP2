@@ -3,8 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="projet.istic.fr.tp2.MainActivity">
     <item
+        android:id="@+id/action_empty"
+        android:orderInCategory="100"
+        android:title="@string/action_empty"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_addPhone"
+        android:orderInCategory="100"
+        android:title="@string/action_addPhone"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_wiki"
+        android:orderInCategory="100"
+        android:title="@string/action_wiki"
         app:showAsAction="never" />
 </menu>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="projet.istic.fr.tp2.MainActivity">
+    tools:context="projet.istic.fr.tp2.Affiche">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_affiche" />
 
     <!--Bouton en bas à droite pour envoyer un mail, pas utile
     <android.support.design.widget.FloatingActionButton
