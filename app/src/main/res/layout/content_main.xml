@@ -8,84 +8,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:id="@+id/layout"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="projet.istic.fr.tp2.MainActivity"
+    tools:context="projet.istic.fr.tp2.ListViewPerson"
     tools:showIn="@layout/activity_main"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/formulaire"
-        android:id="@+id/textView" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="@string/nom"
-        android:ems="10"
-        android:id="@+id/lastName"
-        android:autoText="false"
-        android:filterTouchesWhenObscured="false" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="@string/prenom"
-        android:ems="10"
-        android:id="@+id/firstName" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/date"
-        android:layout_alignParentStart="true"
-        android:text="@string/dateNaissance" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/city"
-        android:ems="10"
-        android:text="@string/villeNaissance" />
+        android:layout_height="0dp"
+        android:id="@+id/listViewCustomer"
+        android:layout_weight="0.86" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/valider"
-        android:id="@+id/valider"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/supprimer"
-        android:id="@+id/supprimer"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerDep"
-        android:entries="@array/departments"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:spinnerMode="dialog" />
-
-
+        android:text="@string/newCustomer"
+        android:id="@+id/newCustomer" />
 </LinearLayout>
-

@@ -25,7 +25,7 @@ public class MainActivity extends Activity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_view_person);
+        setContentView(R.layout.activity_main);
 
         displayListView();
 
