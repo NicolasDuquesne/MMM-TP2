@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ListViewPerson"
+            android:name=".MainActivity"
             android:label="@string/listCustomer"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Affiche"
-            android:label="@string/registerFinish"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".PersonEdit"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <provider android:name=".MyContentProvider" android:exported="true"
+            android:readPermission="true" android:writePermission="true"
+            android:authorities="projet.istic.fr.tp2" />
     </application>
 
 </manifest>

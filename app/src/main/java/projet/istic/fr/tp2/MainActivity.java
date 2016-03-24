@@ -1,161 +1,153 @@
 package projet.istic.fr.tp2;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.app.Activity;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
+import android.app.LoaderManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity implements
+        LoaderManager.LoaderCallbacks<Cursor>{
 
-    private boolean phoneAdded = false;
+    private SimpleCursorAdapter dataAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list_view_person);
 
-        //Récupération de l'intent
-        Intent main = getIntent();
+        displayListView();
 
-        //
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Button add = (Button) findViewById(R.id.newCustomer);
+        add.setOnClickListener(new OnClickListener() {
 
-        //Bouton en bas à droite avec logo email (pas utile)
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
-        //action lorsque l'on clique sur Valider
-        View.OnClickListener validerOnClick = new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
-
-                //Récupération des valeurs des champs du formulaire
-                EditText lastName = (EditText) findViewById(R.id.lastName);
-                EditText firstName = (EditText) findViewById(R.id.firstName);
-                EditText date = (EditText) findViewById(R.id.date);
-                EditText city = (EditText) findViewById(R.id.city);
-
-                //Popup affichant les données (question 6, partie 1.1)
-                /*String conf = "Vos données ont bien été enregistrées " + lastName.getText().toString() + " " + firstName.getText().toString() +
-                        ", né(e) le " + date.getText().toString() + " à " + city.getText().toString();
-
-                Toast.makeText(getApplicationContext(),
-                        conf, Toast.LENGTH_SHORT).show();*/
-
-                //Création d'un Intent vers Affiche (TP1)
-                //Intent iAffiche = new Intent(MainActivity.this, Affiche.class);
-
-                //Création d'un Intent vers ListViewPerson
-                Intent iListView = new Intent(MainActivity.this, ListViewPerson.class);
-
-                //Envoi des valeurs avec une clé pour les identifier
-                /*iAffiche.putExtra("lastName", lastName.getText().toString());
-                iAffiche.putExtra("firstName", firstName.getText().toString());
-                iAffiche.putExtra("date", date.getText().toString());
-                iAffiche.putExtra("city", city.getText().toString());*/
-
-                //Création d'un objet parcelable Person
-                /*Person p = new Person(lastName.getText().toString(),
-                        firstName.getText().toString(),
-                        date.getText().toString(),
-                        city.getText().toString());*/
-                //Envoi de l'objet vers Affiche avec une clé pour l'identifier
-                //iAffiche.putExtra("Person", p);
-
-                //Envoi de l'objet vers ListViewPerson avec une clé pour l'identifier
-                //iListView.putExtra("Person", p);
-
-                //Lancement de l'Intent iAffiche
-                //startActivity(iAffiche);
-
-                //Lancement de l'Intent iListViewPerson
-                startActivity(iListView);
-
+                // starts a new Intent to add a Country
+                Intent personEdit = new Intent(getBaseContext(), PersonEdit.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", "add");
+                personEdit.putExtras(bundle);
+                startActivity(personEdit);
             }
-        };
+        });
 
-        Button valider = (Button) findViewById(R.id.valider);
-        valider.setOnClickListener(validerOnClick);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Starts a new or restarts an existing Loader in this manager
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    private void displayListView() {
+
+        // The desired columns to be bound
+        String[] columns = new String[] {
+                PersonDB.KEY_FIRSTNAME,
+                PersonDB.KEY_LASTNAME,
+                PersonDB.KEY_DATE,
+                PersonDB.KEY_CITY
+        };
+
+        // the XML defined views which the data will be bound to
+        int[] to = new int[] {
+                R.id.firstNameItem,
+                R.id.lastNameItem,
+                R.id.dateItem,
+                R.id.cityItem,
+        };
+
+        // create an adapter from the SimpleCursorAdapter
+        dataAdapter = new SimpleCursorAdapter(
+                this,
+                R.layout.item,
+                null,
+                columns,
+                to,
+                0);
+
+        // get reference to the ListView
+        ListView listView = (ListView) findViewById(R.id.listViewCustomer);
+        // Assign adapter to ListView
+        listView.setAdapter(dataAdapter);
+        //Ensures a loader is initialized and active.
+        getLoaderManager().initLoader(0, null, this);
+
+
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view,
+                                    int position, long id) {
+                // Get the cursor, positioned to the corresponding row in the result set
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+                // display the selected country
+                String countryCode =
+                        cursor.getString(cursor.getColumnIndexOrThrow(PersonDB.KEY_FIRSTNAME));
+                Toast.makeText(getApplicationContext(),
+                        countryCode, Toast.LENGTH_SHORT).show();
+
+                String rowId =
+                        cursor.getString(cursor.getColumnIndexOrThrow(PersonDB.KEY_ROWID));
+
+                // starts a new Intent to update/delete a Country
+                // pass in row Id to create the Content URI for a single row
+                Intent personEdit = new Intent(getBaseContext(), PersonEdit.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", "update");
+                bundle.putString("rowId", rowId);
+                personEdit.putExtras(bundle);
+                startActivity(personEdit);
+
+            }
+        });
+
+    }
+
+    // This is called when a new Loader needs to be created.
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                PersonDB.KEY_ROWID,
+                PersonDB.KEY_FIRSTNAME,
+                PersonDB.KEY_LASTNAME,
+                PersonDB.KEY_DATE,
+                PersonDB.KEY_CITY};
+        CursorLoader cursorLoader = new CursorLoader(this,
+                MyContentProvider.CONTENT_URI, projection, null, null, null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
+        // old cursor once we return.)
+        dataAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed.  We need to make sure we are no
+        // longer using it.
+        dataAdapter.swapCursor(null);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        //Action de l'option "Vider le formulaire"
-        if (id == R.id.action_empty) {
-            EditText lastName = (EditText) findViewById(R.id.lastName);
-            EditText firstName = (EditText) findViewById(R.id.firstName);
-            EditText date = (EditText) findViewById(R.id.date);
-            EditText city = (EditText) findViewById(R.id.city);
-            lastName.setText("");
-            firstName.setText("");
-            date.setText("");
-            city.setText("");
-        }
-
-        //Action de l'option "Ajout Téléphone"
-        if (id == R.id.action_addPhone) {
-            if(!phoneAdded) {
-                LinearLayout main = (LinearLayout) findViewById(R.id.layout);
-                EditText phone = new EditText(getApplicationContext());
-                phone.setText("Téléphone");
-                phone.setBackgroundColor(R.color.colorPrimaryDark);
-                main.addView(phone);
-                item.setEnabled(false);
-                phoneAdded = true;
-            }
-        }
-
-        //Action de l'option "Wikipedia"
-        if (id == R.id.action_wiki) {
-            EditText city = (EditText) findViewById(R.id.city);
-            Intent web = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://fr.wikipedia.org/wiki/"
-                            + (city.getText())));
-            startActivity(web);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 }

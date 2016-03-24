@@ -15,4 +15,5 @@
     <string name="newCustomer">Nouveau client</string>
     <string name="listCustomer">Liste des clients</string>
     <string name="registerFinish">Enregistrement terminé</string>
+    <string name="supprimer">Supprimer</string>
 </resources>
