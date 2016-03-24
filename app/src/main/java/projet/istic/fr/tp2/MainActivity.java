@@ -1,11 +1,12 @@
 package projet.istic.fr.tp2;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,12 +14,19 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-import android.app.LoaderManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends Activity implements
         LoaderManager.LoaderCallbacks<Cursor>{
+
+    private ListView maListViewPerso;
+    private SimpleAdapter mListAdapter;
+    private ArrayList<HashMap<String, String>> listItem;
 
     private SimpleCursorAdapter dataAdapter;
 
@@ -29,9 +37,68 @@ public class MainActivity extends Activity implements
 
         displayListView();
 
+        //Récupération de la listview créée dans le fichier content_main.xml
+/*        maListViewPerso = (ListView) findViewById(R.id.listViewCustomer);
+
+        //Création de la ArrayList qui nous permettra de remplir la listView
+        listItem = new ArrayList<HashMap<String, String>>();
+
+        //On déclare la HashMap qui contiendra les informations pour un item
+        HashMap<String, String> map;
+
+        //Création d'une HashMap pour insérer les informations du premier item de notre listView
+        map = new HashMap<String, String>();
+        //on insère un élément firstname que l'on récupérera dans le textView firsname créé dans le fichier item.xml
+        map.put("firstname", "Charles");
+        //on insère un élément lastname que l'on récupérera dans le textView lastname créé dans le fichier item.xml
+        map.put("lastname", "Dupont");
+        //on insère un élément date que l'on récupérera dans le  textView date créé dans le fichier item.xml
+        map.put("date", "01/01/1970");
+        //on insère un élément city que l'on récupérera dans le  textView city créé dans le fichier item.xml
+        map.put("city", "Rennes");
+        //enfin on ajoute cette hashMap dans la arrayList
+        listItem.add(map);
+
+        //On refait la manip plusieurs fois avec des données différentes pour former les items de notre ListView
+
+        map = new HashMap<String, String>();
+        map.put("firstname", "Jacques");
+        map.put("lastname", "Dupont");
+        map.put("date", "15/03/1985");
+        map.put("city", "Rennes");
+        listItem.add(map);
+
+        //Récupération de l'intent
+        Intent ajout = getIntent();
+
+        //Création d'un SimpleAdapter qui se chargera de mettre les items présent dans notre list (listItem) dans la vue item
+        mListAdapter = new SimpleAdapter (this.getBaseContext(), listItem, R.layout.item,
+                new String[] {"firstname", "lastname", "date", "city"}, new int[] {R.id.firstNameItem, R.id.lastNameItem, R.id.dateItem, R.id.cityItem});
+
+        //On attribue à notre listView l'adapter que l'on vient de créer
+        maListViewPerso.setAdapter(mListAdapter);
+
+        maListViewPerso.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //on récupère la HashMap contenant les infos de notre item (titre, description, img)
+                HashMap<String, String> map = (HashMap<String, String>) maListViewPerso.getItemAtPosition(position);
+                //on créer une boite de dialogue
+                AlertDialog.Builder adb = new AlertDialog.Builder(ListViewPerson.this);
+                //on attribut un titre à notre boite de dialogue
+                adb.setTitle("Sélection Client");
+                //on insère un message à notre boite de dialogue, et ici on affiche le titre de l'item cliqué
+                adb.setMessage("Votre choix : "+map.get("firstname"));
+                //on indique que l'on veut le bouton ok à notre boite de dialogue
+                adb.setPositiveButton("Ok", null);
+                //on affiche la boite de dialogue
+                adb.show();
+            }
+
+        });*/
+
         Button add = (Button) findViewById(R.id.newCustomer);
         add.setOnClickListener(new OnClickListener() {
-
             public void onClick(View v) {
                 // starts a new Intent to add a Country
                 Intent personEdit = new Intent(getBaseContext(), PersonEdit.class);
@@ -150,4 +217,16 @@ public class MainActivity extends Activity implements
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+    public void addItem(View v) {
+        HashMap<String, String> map;
+        map = new HashMap<String, String>();
+        map.put("firstname", "");
+        map.put("lastname", "");
+        map.put("date", "");
+        map.put("city", "");
+        listItem.add(map);
+        mListAdapter.notifyDataSetChanged();
+    }
+
 }
